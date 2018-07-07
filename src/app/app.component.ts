@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AppService} from "./app.service";
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,13 @@ export class AppComponent implements OnInit {
   @ViewChild('mainCanvas')
   public mainCanvas: ElementRef;
 
-  private context: CanvasRenderingContext2D;
+  constructor(private appService: AppService) {
+
+  }
 
   ngOnInit(): void {
-    this.context = this.mainCanvas.nativeElement.getContext('2d');
+    this.appService.initCanvas(this.mainCanvas);
+    this.appService.drawBoard();
   }
 
 }
