@@ -17,7 +17,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.initCanvas(this.mainCanvas);
-    this.appService.drawBoard();
   }
 
 }
