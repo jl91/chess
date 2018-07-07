@@ -16,7 +16,7 @@ export class PiecesService {
       .addEventListener('load', () => {
         this.context.beginPath();
         this.context.drawImage(this.image,
-          0, 0,   // Start at 70/20 pixels from the left and the top of the image (crop),
+          223, 45,   // Start at 70/20 pixels from the left and the top of the image (crop),
           48, 50,   // "Get" a `50 * 50` (w * h) area from the source image (crop),
           0, 0,     // Place the result at 0, 0 in the canvas,
           75, 75
