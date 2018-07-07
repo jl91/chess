@@ -1,5 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { BoardService } from "./board.service";
+import { PiecesService } from "./pieces.service";
 
 @Injectable()
 export class AppService {
@@ -8,16 +9,19 @@ export class AppService {
   private readonly canvasWidth = 600;
   private readonly canvasHeight = 600;
 
-  constructor(private boardService: BoardService) {
-
+  constructor(
+    private boardService: BoardService,
+    private piecesService: PiecesService
+  ) {
   }
 
   public initCanvas(elementRef: ElementRef) {
     this.elementRef = elementRef;
     this.elementRef.nativeElement.width = this.canvasWidth;
     this.elementRef.nativeElement.height = this.canvasHeight;
-    this.context = elementRef.nativeElement.getContext('2d')
+    this.context = elementRef.nativeElement.getContext('2d');
     this.boardService.drawBoard(this.context);
+    this.piecesService.drawPieces(this.context);
   }
 
 
