@@ -1,9 +1,10 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-import {AppComponent} from './app.component';
-import {AppService} from "./app.service";
-import {BoardService} from "./board.service";
+import { AppComponent } from './app.component';
+import { AppService } from "./app.service";
+import { BoardService } from "./board.service";
+import { PiecesService } from "./pieces.service";
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import {BoardService} from "./board.service";
   ],
   providers: [
     AppService,
-    BoardService
+    BoardService,
+    PiecesService
   ],
   bootstrap: [AppComponent]
 })

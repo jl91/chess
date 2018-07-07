@@ -1,5 +1,5 @@
-import {ElementRef, Injectable} from '@angular/core';
-import {BoardService} from "./board.service";
+import { ElementRef, Injectable } from '@angular/core';
+import { BoardService } from "./board.service";
 
 @Injectable()
 export class AppService {

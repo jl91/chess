@@ -1,4 +1,4 @@
-import {ElementRef, Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class BoardService {
@@ -35,6 +35,7 @@ export class BoardService {
     this.context.fillStyle = this.getSquareColor(isEvenRow, isEvenColumn);
     this.context.fillRect(x, y, this.columnWidth, this.lineHeight);
     this.context.closePath();
+    this.context.fill();
   }
 
   private isEven(value: number): boolean {
