@@ -6,8 +6,8 @@ export class BoardService {
   private context: CanvasRenderingContext2D;
   private readonly columnWidth = 75
   private readonly lineHeight = 75
-  private readonly firstColor = 'white';
-  private readonly secondColor = 'black';
+  private readonly firstColor = '#FF8C00';
+  private readonly secondColor = '#8B4513';
 
 
   public drawBoard(context: CanvasRenderingContext2D): void {
