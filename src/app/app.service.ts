@@ -6,8 +6,8 @@ import { PiecesService } from "./pieces.service";
 export class AppService {
   private elementRef: ElementRef;
   private context: CanvasRenderingContext2D;
-  private readonly canvasWidth = 600;
-  private readonly canvasHeight = 600;
+  private readonly canvasWidth = 650;
+  private readonly canvasHeight = 650;
 
   constructor(
     private boardService: BoardService,
