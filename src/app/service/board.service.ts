@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { SquareModel } from "../model/square.model";
+import { BoardPositionsMap } from "../map/board-positions.map";
+import { SizesEnum } from "../enum/sizes.enum";
 
 @Injectable()
 export class BoardService {
 
   private context: CanvasRenderingContext2D;
-  private readonly columnWidth = 75
-  private readonly rowHeight = 75
+  private readonly columnWidth = SizesEnum.SQUARE_WIDTH;
+  private readonly rowHeight = SizesEnum.SQUARE_HEIGHT
   private readonly columnsSize = 8;
   private readonly rowsSize = 8;
   private readonly firstColor = '#FF8C00';
   private readonly secondColor = '#8B4513';
-  private readonly columnIndexes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  private readonly rowIndexes = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-  private boardMap = new Map<string, SquareModel>();
+  constructor(private boardPositionsMap: BoardPositionsMap) {
+
+  }
 
   public drawBoard(context: CanvasRenderingContext2D): void {
     this.context = context;
@@ -37,11 +38,11 @@ export class BoardService {
 
     const hSpace = 55;
     const vSpace = 70;
-    const increment = 75;
+    const increment = SizesEnum.SQUARE_WIDTH as number;
     for (let i = 0; i < 8; i++) {
 
-      let columnWord = this.columnIndexes[i];
-      let rowWord = this.rowIndexes[i];
+      let columnWord = this.boardPositionsMap.columnIndexes[i];
+      let rowWord = this.boardPositionsMap.rowIndexes[i];
 
       //top
       this.drawBoardCoordinate(columnWord, increment * i + hSpace, 18);
@@ -68,18 +69,17 @@ export class BoardService {
   }
 
   private drawSquares(): void {
-    let x = 25;
-    let y = 25;
+    let x = SizesEnum.BORDER_SIZE;
+    let y = SizesEnum.BORDER_SIZE;
     for (let i = 0; i < this.rowsSize; i++) {
       this.drawRow(i, x, y);
-      x = 25;
+      x = SizesEnum.BORDER_SIZE;
       y += this.columnWidth;
     }
   }
 
   private drawRow(i: number, x: number, y: number) {
     for (let j = 0; j < this.columnsSize; j++) {
-      this.addToMap(i, j);
       this.drawSquare(x, y, i, j);
       x += this.columnWidth;
     }
@@ -106,11 +106,16 @@ export class BoardService {
     return isEvenColumn ? this.secondColor : this.firstColor;
   }
 
-  private addToMap(rowIndex: number, columnIndex: number): void {
-    const square = new SquareModel();
-    square.column = this.columnIndexes[columnIndex];
-    square.row = this.rowIndexes[rowIndex];
-    const coordinate = square.row + square.column;
-    this.boardMap.set(coordinate, square);
+  public drawMouseOver(x: number, y: number): void {
+    this.boardPositionsMap
+      .map
+      .forEach((position, key) => {
+        if (
+          x >= position.startX && x <= position.endX &&
+          y >= position.startY && y <= position.endY
+        ) {
+          console.log(key);
+        }
+      });
   }
 }

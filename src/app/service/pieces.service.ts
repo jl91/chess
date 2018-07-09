@@ -43,24 +43,27 @@ export class PiecesService {
 
         this.context.beginPath();
 
-        const coordinates = this.piecesSpriteMap.getPieceSpriteCoordinate(piecesName);
+        const coordinates = this.piecesSpriteMap
+          .getPieceSpriteCoordinate(piecesName);
 
-        const position = this.boardPositionsMap.map.get(key);
-        console.log(position);
+        const position = this.boardPositionsMap
+          .map.get(key);
 
-        this.context.drawImage(
-          this.image,
-          coordinates.srcX,
-          coordinates.srcY,
-          coordinates.srcW,
-          coordinates.srcH,
-          position.dstX,
-          position.dstY,
-          coordinates.dstW,
-          coordinates.dstH
-        );
-        this.context.closePath();
+        this.context
+          .drawImage(
+            this.image,
+            coordinates.srcX,
+            coordinates.srcY,
+            coordinates.srcW,
+            coordinates.srcH,
+            position.dstX,
+            position.dstY,
+            coordinates.dstW,
+            coordinates.dstH
+          );
+
         this.context.fill();
+        this.context.closePath();
       });
   }
 

@@ -1,5 +1,8 @@
 <div>
-  <canvas #mainCanvas>
+  <canvas
+    #mainCanvas
+    (mousemove)="onMouseMove($event)"
+  >
     Se você visualizar esse texto, seu browser não suporta a tag canvas.
   </canvas>
 </div>

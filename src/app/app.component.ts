@@ -19,4 +19,8 @@ export class AppComponent implements OnInit {
     this.appService.initCanvas(this.mainCanvas);
   }
 
+  onMouseMove(event: MouseEvent): void {
+    this.appService.onMouseMove(event);
+  }
+
 }
