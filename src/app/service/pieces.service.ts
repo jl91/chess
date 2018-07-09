@@ -5,13 +5,14 @@ import { PositionsEnum } from "../enum/positions.enum";
 import { PiecesNamesEnum } from "../enum/pieces-names.enum";
 import { PiecesSpriteMap } from "../map/pieces-sprite.map";
 import { BoardPositionsMap } from "../map/board-positions.map";
+import { SizesEnum } from "../enum/sizes.enum";
 
 @Injectable()
 export class PiecesService {
 
   private context: CanvasRenderingContext2D;
-  private image = new Image(75, 75);
-  private spriteSubject = new Subject<boolean>();
+  private image = new Image(SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
+  public spriteSubject = new Subject<boolean>();
 
   constructor(
     private initialPositionMap: InitialPositionMap,

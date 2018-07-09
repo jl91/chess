@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BoardPositionsMap } from "../map/board-positions.map";
 import { SizesEnum } from "../enum/sizes.enum";
 import { Position } from "../model/position";
+import { PiecesService } from "./pieces.service";
 
 @Injectable()
 export class BoardService {
@@ -15,7 +16,10 @@ export class BoardService {
   private readonly secondColor = '#8B4513';
   private lastPosition: Position;
 
-  constructor(private boardPositionsMap: BoardPositionsMap) {
+  constructor(
+    private boardPositionsMap: BoardPositionsMap,
+    private piecesService: PiecesService
+  ) {
 
   }
 
@@ -116,22 +120,27 @@ export class BoardService {
           x >= position.startX && x <= position.endX &&
           y >= position.startY && y <= position.endY
         ) {
-          if (
-            this.lastPosition &&
-            (
-              position.startX !== this.lastPosition.startX ||
-              position.endX !== this.lastPosition.endX ||
-              position.startY !== this.lastPosition.startY ||
-              position.endY !== this.lastPosition.endY
-            )
-          ) {
-            this.drawBoard(this.context);
-          }
 
+          this.reDraw(position);
           this.lastPosition = position;
           this.drawSquareBorder(position);
         }
       });
+  }
+
+  private reDraw(position: Position): void {
+    if (
+      this.lastPosition &&
+      (
+        position.startX !== this.lastPosition.startX ||
+        position.endX !== this.lastPosition.endX ||
+        position.startY !== this.lastPosition.startY ||
+        position.endY !== this.lastPosition.endY
+      )
+    ) {
+      this.drawBoard(this.context);
+      this.piecesService.spriteSubject.next(true);
+    }
   }
 
   private drawSquareBorder(position: Position): void {
