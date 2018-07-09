@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PieceModel } from "./piece.model";
+import { SquareModel } from "./square-model";
 
 @Injectable()
 export class BoardService {
@@ -11,7 +11,10 @@ export class BoardService {
   private readonly rowsSize = 8;
   private readonly firstColor = '#FF8C00';
   private readonly secondColor = '#8B4513';
-  private boardMap = new Map<string, PieceModel>();
+  private boardMap = new Map<string, SquareModel>();
+
+  private readonly columnIndexes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  private readonly rowIndexes = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
 
   public drawBoard(context: CanvasRenderingContext2D): void {
@@ -20,7 +23,6 @@ export class BoardService {
     this.drawBoardCoordinates();
     this.drawSquares();
   }
-
 
   private drawBorder(): void {
     const canvas = this.context.canvas;
@@ -33,6 +35,8 @@ export class BoardService {
   }
 
   private drawBoardCoordinates(): void {
+
+    //top
     this.drawBoardCoordinate('A', 55, 18);
     this.drawBoardCoordinate('B', 130, 18);
     this.drawBoardCoordinate('C', 205, 18);
@@ -42,24 +46,7 @@ export class BoardService {
     this.drawBoardCoordinate('G', 505, 18);
     this.drawBoardCoordinate('H', 580, 18);
 
-    this.drawBoardCoordinate('A', 55, 645);
-    this.drawBoardCoordinate('B', 130, 645);
-    this.drawBoardCoordinate('C', 205, 645);
-    this.drawBoardCoordinate('D', 280, 645);
-    this.drawBoardCoordinate('E', 355, 645);
-    this.drawBoardCoordinate('F', 430, 645);
-    this.drawBoardCoordinate('G', 505, 645);
-    this.drawBoardCoordinate('H', 580, 645);
-
-    this.drawBoardCoordinate('8', 6, 70);
-    this.drawBoardCoordinate('7', 6, 145);
-    this.drawBoardCoordinate('6', 6, 215);
-    this.drawBoardCoordinate('5', 6, 295);
-    this.drawBoardCoordinate('4', 6, 365);
-    this.drawBoardCoordinate('3', 6, 440);
-    this.drawBoardCoordinate('2', 6, 515);
-    this.drawBoardCoordinate('1', 6, 590);
-
+    //right
     this.drawBoardCoordinate('8', 632.5, 70);
     this.drawBoardCoordinate('7', 632.5, 145);
     this.drawBoardCoordinate('6', 632.5, 215);
@@ -69,6 +56,25 @@ export class BoardService {
     this.drawBoardCoordinate('2', 632.5, 515);
     this.drawBoardCoordinate('1', 632.5, 590);
 
+    //bottom
+    this.drawBoardCoordinate('A', 55, 645);
+    this.drawBoardCoordinate('B', 130, 645);
+    this.drawBoardCoordinate('C', 205, 645);
+    this.drawBoardCoordinate('D', 280, 645);
+    this.drawBoardCoordinate('E', 355, 645);
+    this.drawBoardCoordinate('F', 430, 645);
+    this.drawBoardCoordinate('G', 505, 645);
+    this.drawBoardCoordinate('H', 580, 645);
+
+    //left
+    this.drawBoardCoordinate('8', 6, 70);
+    this.drawBoardCoordinate('7', 6, 145);
+    this.drawBoardCoordinate('6', 6, 215);
+    this.drawBoardCoordinate('5', 6, 295);
+    this.drawBoardCoordinate('4', 6, 365);
+    this.drawBoardCoordinate('3', 6, 440);
+    this.drawBoardCoordinate('2', 6, 515);
+    this.drawBoardCoordinate('1', 6, 590);
   }
 
   private drawBoardCoordinate(word: string, x: number, y: number): void {
@@ -92,6 +98,7 @@ export class BoardService {
 
   private drawRow(i: number, x: number, y: number) {
     for (let j = 0; j < this.columnsSize; j++) {
+      this.addToMap(i, j);
       this.drawSquare(x, y, i, j);
       x += this.columnWidth;
     }
@@ -112,13 +119,17 @@ export class BoardService {
   }
 
   private getSquareColor(isEvenRow: boolean, isEvenColumn: boolean): string {
-    let color = '';
-
     if (isEvenRow) {
-      color = isEvenColumn ? this.firstColor : this.secondColor;
-    } else {
-      color = isEvenColumn ? this.secondColor : this.firstColor;
+      return isEvenColumn ? this.firstColor : this.secondColor;
     }
-    return color;
+    return isEvenColumn ? this.secondColor : this.firstColor;
+  }
+
+  private addToMap(rowIndex: number, columnIndex: number): void {
+    const square = new SquareModel();
+    square.column = this.columnIndexes[columnIndex];
+    square.row = this.rowIndexes[rowIndex];
+    const coordinate = square.row + square.column;
+    this.boardMap.set(coordinate, square);
   }
 }
