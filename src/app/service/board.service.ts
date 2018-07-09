@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BoardPositionsMap } from "../map/board-positions.map";
 import { SizesEnum } from "../enum/sizes.enum";
+import { Position } from "../model/position";
 
 @Injectable()
 export class BoardService {
@@ -109,13 +110,22 @@ export class BoardService {
   public drawMouseOver(x: number, y: number): void {
     this.boardPositionsMap
       .map
-      .forEach((position, key) => {
+      .forEach((position: Position, key) => {
         if (
           x >= position.startX && x <= position.endX &&
           y >= position.startY && y <= position.endY
         ) {
-          console.log(key);
+          this.drawSquareBorder(position);
         }
       });
+  }
+
+  private drawSquareBorder(position: Position): void {
+    this.context.beginPath();
+    this.context.strokeStyle = '#AFEEEE';
+    this.context.lineWidth = 5;
+    this.context.strokeRect(position.startX, position.startY, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
+    this.context.fill();
+    this.context.closePath();
   }
 }
