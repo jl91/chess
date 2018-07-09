@@ -2,9 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { AppService } from "./app.service";
-import { BoardService } from "./board.service";
-import { PiecesService } from "./pieces.service";
+import { AppService } from "./service/app.service";
+import { BoardService } from "./service/board.service";
+import { PiecesService } from "./service/pieces.service";
 
 
 @NgModule({

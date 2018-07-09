@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SquareModel } from "./square-model";
+import { SquareModel } from "../model/square.model";
 
 @Injectable()
 export class BoardService {
@@ -11,11 +11,10 @@ export class BoardService {
   private readonly rowsSize = 8;
   private readonly firstColor = '#FF8C00';
   private readonly secondColor = '#8B4513';
-  private boardMap = new Map<string, SquareModel>();
-
   private readonly columnIndexes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private readonly rowIndexes = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
+  private boardMap = new Map<string, SquareModel>();
 
   public drawBoard(context: CanvasRenderingContext2D): void {
     this.context = context;
@@ -36,45 +35,27 @@ export class BoardService {
 
   private drawBoardCoordinates(): void {
 
-    //top
-    this.drawBoardCoordinate('A', 55, 18);
-    this.drawBoardCoordinate('B', 130, 18);
-    this.drawBoardCoordinate('C', 205, 18);
-    this.drawBoardCoordinate('D', 280, 18);
-    this.drawBoardCoordinate('E', 355, 18);
-    this.drawBoardCoordinate('F', 430, 18);
-    this.drawBoardCoordinate('G', 505, 18);
-    this.drawBoardCoordinate('H', 580, 18);
+    const hSpace = 55;
+    const vSpace = 70;
+    const increment = 75;
+    for (let i = 0; i < 8; i++) {
 
-    //right
-    this.drawBoardCoordinate('8', 632.5, 70);
-    this.drawBoardCoordinate('7', 632.5, 145);
-    this.drawBoardCoordinate('6', 632.5, 215);
-    this.drawBoardCoordinate('5', 632.5, 295);
-    this.drawBoardCoordinate('4', 632.5, 365);
-    this.drawBoardCoordinate('3', 632.5, 440);
-    this.drawBoardCoordinate('2', 632.5, 515);
-    this.drawBoardCoordinate('1', 632.5, 590);
+      let columnWord = this.columnIndexes[i];
+      let rowWord = this.rowIndexes[i];
 
-    //bottom
-    this.drawBoardCoordinate('A', 55, 645);
-    this.drawBoardCoordinate('B', 130, 645);
-    this.drawBoardCoordinate('C', 205, 645);
-    this.drawBoardCoordinate('D', 280, 645);
-    this.drawBoardCoordinate('E', 355, 645);
-    this.drawBoardCoordinate('F', 430, 645);
-    this.drawBoardCoordinate('G', 505, 645);
-    this.drawBoardCoordinate('H', 580, 645);
+      //top
+      this.drawBoardCoordinate(columnWord, increment * i + hSpace, 18);
 
-    //left
-    this.drawBoardCoordinate('8', 6, 70);
-    this.drawBoardCoordinate('7', 6, 145);
-    this.drawBoardCoordinate('6', 6, 215);
-    this.drawBoardCoordinate('5', 6, 295);
-    this.drawBoardCoordinate('4', 6, 365);
-    this.drawBoardCoordinate('3', 6, 440);
-    this.drawBoardCoordinate('2', 6, 515);
-    this.drawBoardCoordinate('1', 6, 590);
+      //botom
+      this.drawBoardCoordinate(columnWord, increment * i + hSpace, 645);
+
+      //left
+      this.drawBoardCoordinate(rowWord, 6, increment * i + vSpace);
+
+      //right
+      this.drawBoardCoordinate(rowWord, 632.5, increment * i + vSpace);
+    }
+
   }
 
   private drawBoardCoordinate(word: string, x: number, y: number): void {
