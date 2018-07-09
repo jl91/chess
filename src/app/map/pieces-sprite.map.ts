@@ -5,18 +5,18 @@ export class PiecesSpriteMap {
   private map = new Map<PiecesNamesEnum, PieceSpriteCoordinateModel>();
 
   constructor() {
-    this.map.set(PiecesNamesEnum.WHITE_KING, this.fabricateModel(0, 0, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.WHITE_QUEEN, this.fabricateModel(45, 0, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.WHITE_BISHOP, this.fabricateModel(90, 0, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.WHITE_KNIGHT, this.fabricateModel(135, 0, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.WHITE_ROOK, this.fabricateModel(179, 0, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.WHITE_PAWN, this.fabricateModel(223, 0, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.BLACK_KING, this.fabricateModel(0, 45, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.BLACK_QUEEN, this.fabricateModel(45, 45, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.BLACK_BISHOP, this.fabricateModel(90, 45, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.BLACK_KNIGHT, this.fabricateModel(135, 45, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.BLACK_ROOK, this.fabricateModel(179, 45, 48, 50, 0, 0, 75, 75));
-    this.map.set(PiecesNamesEnum.BLACK_PAWN, this.fabricateModel(223, 45, 48, 50, 0, 0, 75, 75));
+    this.map.set(PiecesNamesEnum.WHITE_KING, this.fabricateModel(0, 0, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.WHITE_QUEEN, this.fabricateModel(45, 0, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.WHITE_BISHOP, this.fabricateModel(90, 0, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.WHITE_KNIGHT, this.fabricateModel(135, 0, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.WHITE_ROOK, this.fabricateModel(179, 0, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.WHITE_PAWN, this.fabricateModel(223, 0, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.BLACK_KING, this.fabricateModel(0, 45, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.BLACK_QUEEN, this.fabricateModel(45, 45, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.BLACK_BISHOP, this.fabricateModel(90, 45, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.BLACK_KNIGHT, this.fabricateModel(135, 45, 48, 50, 75, 75));
+    this.map.set(PiecesNamesEnum.BLACK_ROOK, this.fabricateModel(179, 45, 48, 50,  75, 75));
+    this.map.set(PiecesNamesEnum.BLACK_PAWN, this.fabricateModel(223, 45, 48, 50,  75, 75));
   }
 
   public getPieceSpriteCoordinate(pieceName: PiecesNamesEnum): PieceSpriteCoordinateModel {
@@ -29,8 +29,6 @@ export class PiecesSpriteMap {
     srcY: number,
     srcW: number,
     srcH: number,
-    dstX: number,
-    dstY: number,
     dstW: number,
     dstH: number
   ): PieceSpriteCoordinateModel {
@@ -39,8 +37,8 @@ export class PiecesSpriteMap {
     model.srcY = srcY;
     model.srcW = srcW;
     model.srcH = srcH;
-    model.dstX = dstX;
-    model.dstY = dstY;
+    model.dstX = 0;
+    model.dstY = 0;
     model.dstW = dstW;
     model.dstH = dstH;
     return model;
