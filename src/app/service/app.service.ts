@@ -25,8 +25,6 @@ export class AppService {
   }
 
   public onMouseMove(event: MouseEvent): void {
-    this.boardService.drawMouseOver(event.x - 75, event.y - 75);
+    this.boardService.drawMouseOver(event.offsetX, event.offsetY);
   }
-
-
 }
