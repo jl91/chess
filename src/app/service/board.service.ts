@@ -13,6 +13,7 @@ export class BoardService {
   private readonly rowsSize = 8;
   private readonly firstColor = '#FF8C00';
   private readonly secondColor = '#8B4513';
+  private lastPosition: Position;
 
   constructor(private boardPositionsMap: BoardPositionsMap) {
 
@@ -115,6 +116,19 @@ export class BoardService {
           x >= position.startX && x <= position.endX &&
           y >= position.startY && y <= position.endY
         ) {
+          if (
+            this.lastPosition &&
+            (
+              position.startX !== this.lastPosition.startX ||
+              position.endX !== this.lastPosition.endX ||
+              position.startY !== this.lastPosition.startY ||
+              position.endY !== this.lastPosition.endY
+            )
+          ) {
+            this.drawBoard(this.context);
+          }
+
+          this.lastPosition = position;
           this.drawSquareBorder(position);
         }
       });
