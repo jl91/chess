@@ -117,14 +117,17 @@ export class BoardService {
   public drawMouseOver(x: number, y: number): void {
     const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
 
-    if (position) {
-      this.reDraw(position);
-      this.lastPosition = position;
-
-      if (this.positionMap.map.has(position.coordinate)) {
-        this.drawSquareBorder(position);
-      }
+    if (!position) {
+      return;
     }
+
+    this.reDraw(position);
+    this.lastPosition = position;
+
+    if (this.positionMap.map.has(position.coordinate)) {
+      this.drawSquareBorder(position);
+    }
+
 
   }
 
