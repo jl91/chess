@@ -3,6 +3,7 @@ import { BoardPositionsMap } from "../map/board-positions.map";
 import { SizesEnum } from "../enum/sizes.enum";
 import { Position } from "../model/position";
 import { PiecesService } from "./pieces.service";
+import { PositionMap } from "../map/position.map";
 
 @Injectable()
 export class BoardService {
@@ -18,7 +19,8 @@ export class BoardService {
 
   constructor(
     private boardPositionsMap: BoardPositionsMap,
-    private piecesService: PiecesService
+    private piecesService: PiecesService,
+    private positionMap: PositionMap
   ) {
 
   }
@@ -53,7 +55,7 @@ export class BoardService {
       //top
       this.drawBoardCoordinate(columnWord, increment * i + hSpace, 18);
 
-      //botom
+      //bottom
       this.drawBoardCoordinate(columnWord, increment * i + hSpace, 645);
 
       //left
@@ -118,7 +120,10 @@ export class BoardService {
     if (position) {
       this.reDraw(position);
       this.lastPosition = position;
-      this.drawSquareBorder(position);
+
+      if (this.positionMap.map.has(position.coordinate)) {
+        this.drawSquareBorder(position);
+      }
     }
 
   }
