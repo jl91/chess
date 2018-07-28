@@ -35,4 +35,17 @@ export class BoardPositionsMap {
     }
   }
 
+  public getPositionByCoordinates(x: number, y: number): Position | null {
+
+    const position = Array.from(this.map.values())
+      .find((current: Position) => {
+        return x >= current.startX &&
+          x <= current.endX &&
+          y >= current.startY &&
+          y <= current.endY;
+      });
+
+    return position;
+  }
+
 }

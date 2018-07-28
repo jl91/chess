@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppService } from "./service/app.service";
 import { BoardService } from "./service/board.service";
 import { PiecesService } from "./service/pieces.service";
-import { InitialPositionMap } from "./map/initial-position.map";
+import { PositionMap } from "./map/position.map";
 import { PiecesSpriteMap } from "./map/pieces-sprite.map";
 import { BoardPositionsMap } from "./map/board-positions.map";
 
@@ -21,7 +21,7 @@ import { BoardPositionsMap } from "./map/board-positions.map";
     AppService,
     BoardService,
     PiecesService,
-    InitialPositionMap,
+    PositionMap,
     PiecesSpriteMap,
     BoardPositionsMap
   ],

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs/Subject";
-import { InitialPositionMap } from "../map/initial-position.map";
+import { PositionMap } from "../map/position.map";
 import { PositionsEnum } from "../enum/positions.enum";
 import { PiecesNamesEnum } from "../enum/pieces-names.enum";
 import { PiecesSpriteMap } from "../map/pieces-sprite.map";
@@ -15,7 +15,7 @@ export class PiecesService {
   public spriteSubject = new Subject<boolean>();
 
   constructor(
-    private initialPositionMap: InitialPositionMap,
+    private initialPositionMap: PositionMap,
     private piecesSpriteMap: PiecesSpriteMap,
     private boardPositionsMap: BoardPositionsMap
   ) {

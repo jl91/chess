@@ -1,10 +1,14 @@
 import { PiecesNamesEnum } from "../enum/pieces-names.enum";
 import { PositionsEnum } from "../enum/positions.enum";
 
-export class InitialPositionMap {
+export class PositionMap {
   public map = new Map<PositionsEnum, PiecesNamesEnum>();
 
   constructor() {
+    this.restartPieces();
+  }
+
+  public restartPieces(): void {
     this.map.set(PositionsEnum.A1, PiecesNamesEnum.WHITE_ROOK);
     this.map.set(PositionsEnum.B1, PiecesNamesEnum.WHITE_KNIGHT);
     this.map.set(PositionsEnum.C1, PiecesNamesEnum.WHITE_BISHOP);

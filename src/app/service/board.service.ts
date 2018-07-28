@@ -113,19 +113,14 @@ export class BoardService {
   }
 
   public drawMouseOver(x: number, y: number): void {
-    this.boardPositionsMap
-      .map
-      .forEach((position: Position, key) => {
-        if (
-          x >= position.startX && x <= position.endX &&
-          y >= position.startY && y <= position.endY
-        ) {
+    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
 
-          this.reDraw(position);
-          this.lastPosition = position;
-          this.drawSquareBorder(position);
-        }
-      });
+    if (position) {
+      this.reDraw(position);
+      this.lastPosition = position;
+      this.drawSquareBorder(position);
+    }
+
   }
 
   private reDraw(position: Position): void {
