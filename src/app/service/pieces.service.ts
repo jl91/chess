@@ -6,6 +6,7 @@ import { PiecesNamesEnum } from "../enum/pieces-names.enum";
 import { PiecesSpriteMap } from "../map/pieces-sprite.map";
 import { BoardPositionsMap } from "../map/board-positions.map";
 import { SizesEnum } from "../enum/sizes.enum";
+import { PieceModel } from "../model/piece.model";
 
 @Injectable()
 export class PiecesService {
@@ -15,7 +16,7 @@ export class PiecesService {
   public spriteSubject = new Subject<boolean>();
 
   constructor(
-    private initialPositionMap: PositionMap,
+    private positionMap: PositionMap,
     private piecesSpriteMap: PiecesSpriteMap,
     private boardPositionsMap: BoardPositionsMap
   ) {
@@ -38,14 +39,14 @@ export class PiecesService {
   }
 
   private drawPiece(): void {
-    this.initialPositionMap
+    this.positionMap
       .map
-      .forEach((piecesName: PiecesNamesEnum, key: PositionsEnum) => {
+      .forEach((piece: PieceModel, key: PositionsEnum) => {
 
         this.context.beginPath();
 
         const coordinates = this.piecesSpriteMap
-          .getPieceSpriteCoordinate(piecesName);
+          .getPieceSpriteCoordinate(piece.name);
 
         const position = this.boardPositionsMap
           .map.get(key);

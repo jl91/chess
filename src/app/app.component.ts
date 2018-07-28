@@ -23,4 +23,8 @@ export class AppComponent implements OnInit {
     this.appService.onMouseMove(event);
   }
 
+  onClick(event: MouseEvent): void {
+    this.appService.onClick(event);
+  }
+
 }

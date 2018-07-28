@@ -115,6 +115,8 @@ export class BoardService {
   }
 
   public drawMouseOver(x: number, y: number): void {
+    this.changeMouseCursor(false);
+
     const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
 
     if (!position) {
@@ -126,7 +128,26 @@ export class BoardService {
 
     if (this.positionMap.map.has(position.coordinate)) {
       this.drawSquareBorder(position);
+      this.changeMouseCursor(true);
+      return;
     }
+
+  }
+
+  public drawPiecePossibleMoviments(x: number, y: number): void {
+    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+    if (!position) {
+      return;
+    }
+
+    if (!this.positionMap.map.has(position.coordinate)) {
+      return;
+    }
+
+    const piece = this.positionMap.map.get(position.coordinate);
+
+
 
 
   }
@@ -153,5 +174,13 @@ export class BoardService {
     this.context.strokeRect(position.startX, position.startY, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
     this.context.fill();
     this.context.closePath();
+  }
+
+  private changeMouseCursor(isPointer: boolean): void {
+    if (isPointer) {
+      document.body.style.cursor = 'pointer';
+      return;
+    }
+    document.body.style.cursor = 'auto';
   }
 }

@@ -1,6 +1,7 @@
+import { PositionsEnum } from "../enum/positions.enum";
+import { PiecesNamesEnum } from "../enum/pieces-names.enum";
+
 export class PieceModel {
-  public name: string;
-  public spriteMap: string;
-  public row: string;
-  public column: string;
+  public name: PiecesNamesEnum;
+  public position: PositionsEnum;
 }
