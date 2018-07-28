@@ -147,8 +147,7 @@ export class BoardService {
 
     const piece = this.positionMap.map.get(position.coordinate);
 
-
-
+    console.log(piece);
 
   }
 
