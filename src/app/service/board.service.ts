@@ -135,6 +135,7 @@ export class BoardService {
   }
 
   public drawPiecePossibleMoviments(x: number, y: number): void {
+
     const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
 
     if (!position) {
@@ -147,8 +148,7 @@ export class BoardService {
 
     const piece = this.positionMap.map.get(position.coordinate);
 
-    console.log(piece);
-
+    this.piecesService.drawPiecePossibleMoviments(position, piece);
   }
 
   private reDraw(position: Position): void {

@@ -7,6 +7,7 @@ import { PiecesSpriteMap } from "../map/pieces-sprite.map";
 import { BoardPositionsMap } from "../map/board-positions.map";
 import { SizesEnum } from "../enum/sizes.enum";
 import { PieceModel } from "../model/piece.model";
+import { Position } from "../model/position";
 
 @Injectable()
 export class PiecesService {
@@ -67,6 +68,28 @@ export class PiecesService {
         this.context.fill();
         this.context.closePath();
       });
+  }
+
+  public drawPiecePossibleMoviments(position: Position, piece: PieceModel): void {
+
+    if (piece.name === PiecesNamesEnum.BLACK_PAWN) {
+      this.drawBlackPawnPossibleMoviementes(position)
+    }
+
+  }
+
+  private drawBlackPawnPossibleMoviementes(position: Position): void {
+    this.drawSquareBorder(position.startX, position.startY * 2 - 25);
+    this.drawSquareBorder(position.startX, position.startY * 3 - 50);
+  }
+
+  private drawSquareBorder(x, y): void {
+    this.context.beginPath();
+    this.context.strokeStyle = '#FF0000';
+    this.context.lineWidth = 5;
+    this.context.strokeRect(x, y, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
+    this.context.fill();
+    this.context.closePath();
   }
 
 
