@@ -41,7 +41,7 @@ export class PositionMap {
     this.map.set(PositionsEnum.H8, PieceFactory.fabricate(PiecesNamesEnum.BLACK_ROOK, PositionsEnum.H8));
 
     this.map.set(PositionsEnum.A7, PieceFactory.fabricate(PiecesNamesEnum.BLACK_PAWN, PositionsEnum.A7));
-    this.map.set(PositionsEnum.B7, PieceFactory.fabricate(PiecesNamesEnum.BLACK_PAWN, PositionsEnum.B7));
+    this.map.set(PositionsEnum.B6, PieceFactory.fabricate(PiecesNamesEnum.BLACK_PAWN, PositionsEnum.B7));
     this.map.set(PositionsEnum.C7, PieceFactory.fabricate(PiecesNamesEnum.BLACK_PAWN, PositionsEnum.C7));
     this.map.set(PositionsEnum.D7, PieceFactory.fabricate(PiecesNamesEnum.BLACK_PAWN, PositionsEnum.D7));
     this.map.set(PositionsEnum.E7, PieceFactory.fabricate(PiecesNamesEnum.BLACK_PAWN, PositionsEnum.E7));

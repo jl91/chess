@@ -73,24 +73,31 @@ export class PiecesService {
   public drawPiecePossibleMoviments(position: Position, piece: PieceModel): void {
 
     if (piece.name === PiecesNamesEnum.BLACK_PAWN) {
-      this.drawBlackPawnPossibleMoviementes(position)
+      this.drawBlackPawnPossibleMoviementes(position, piece)
     }
 
   }
 
-  private drawBlackPawnPossibleMoviementes(position: Position): void {
-    this.drawSquareBorder(position.startX, position.startY * 2 - 25);
-    this.drawSquareBorder(position.startX, position.startY * 3 - 50);
+  private drawBlackPawnPossibleMoviementes(position: Position, piece: PieceModel): void {
+
+    this.drawSquareBorder(position.startX, position.startY * 2 - (SizesEnum.BORDER_SIZE + 1));
+
+    if (this.isFirstMovement(position, piece)) {
+      this.drawSquareBorder(position.startX, position.startY * 3 - (SizesEnum.BORDER_SIZE * 2 + 1));
+    }
+  }
+
+  private isFirstMovement(position: Position, piece: PieceModel): boolean {
+    return piece.position === position.coordinate;
   }
 
   private drawSquareBorder(x, y): void {
     this.context.beginPath();
-    this.context.strokeStyle = '#FF0000';
+    this.context.strokeStyle = 'rgba(255,0,0,0.5)';
     this.context.lineWidth = 5;
     this.context.strokeRect(x, y, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
     this.context.fill();
     this.context.closePath();
   }
-
 
 }
