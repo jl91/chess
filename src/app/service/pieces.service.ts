@@ -1,20 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Subject } from "rxjs/Subject";
-import { PositionMap } from "../map/position.map";
-import { PositionsEnum } from "../enum/positions.enum";
-import { PiecesNamesEnum } from "../enum/pieces-names.enum";
-import { PiecesSpriteMap } from "../map/pieces-sprite.map";
-import { BoardPositionsMap } from "../map/board-positions.map";
-import { SizesEnum } from "../enum/sizes.enum";
-import { PieceModel } from "../model/piece.model";
-import { Position } from "../model/position";
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs/Subject';
+import {PositionMap} from '../map/position.map';
+import {PositionsEnum} from '../enum/positions.enum';
+import {PiecesNamesEnum} from '../enum/pieces-names.enum';
+import {PiecesSpriteMap} from '../map/pieces-sprite.map';
+import {BoardPositionsMap} from '../map/board-positions.map';
+import {SizesEnum} from '../enum/sizes.enum';
+import {PieceModel} from '../model/piece.model';
+import {Position} from '../model/position';
 
 @Injectable()
 export class PiecesService {
 
+  public spriteSubject = new Subject<boolean>();
   private context: CanvasRenderingContext2D;
   private image = new Image(SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
-  public spriteSubject = new Subject<boolean>();
 
   constructor(
     private positionMap: PositionMap,
@@ -32,6 +32,17 @@ export class PiecesService {
   public drawPieces(context: CanvasRenderingContext2D): void {
     this.context = context;
     this.loadSprite();
+  }
+
+  public drawPiecePossibleMoviments(position: Position, piece: PieceModel): void {
+
+    if (piece.name === PiecesNamesEnum.BLACK_PAWN) {
+      this.drawBlackPawnPossibleMovements(position, piece);
+    }
+
+    if (piece.name === PiecesNamesEnum.BLACK_KNIGHT) {
+      this.drawBlackKnightPossibleMovements(position, piece);
+    }
   }
 
   private loadSprite() {
@@ -70,21 +81,16 @@ export class PiecesService {
       });
   }
 
-  public drawPiecePossibleMoviments(position: Position, piece: PieceModel): void {
+  private drawBlackPawnPossibleMovements(position: Position, piece: PieceModel): void {
 
-    if (piece.name === PiecesNamesEnum.BLACK_PAWN) {
-      this.drawBlackPawnPossibleMoviementes(position, piece)
-    }
-
-  }
-
-  private drawBlackPawnPossibleMoviementes(position: Position, piece: PieceModel): void {
-
-    this.drawSquareBorder(position.startX, position.startY * 2 - (SizesEnum.BORDER_SIZE + 1));
+    this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT));
 
     if (this.isFirstMovement(position, piece)) {
-      this.drawSquareBorder(position.startX, position.startY * 3 - (SizesEnum.BORDER_SIZE * 2 + 1));
+      this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT * 2));
     }
+  }
+
+  private drawBlackKnightPossibleMovements(position: Position, piece: PieceModel): void {
   }
 
   private isFirstMovement(position: Position, piece: PieceModel): boolean {
@@ -93,7 +99,7 @@ export class PiecesService {
 
   private drawSquareBorder(x, y): void {
     this.context.beginPath();
-    this.context.strokeStyle = 'rgba(255,0,0,0.5)';
+    this.context.strokeStyle = 'rgba(255, 0, 0)';
     this.context.lineWidth = 5;
     this.context.strokeRect(x, y, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
     this.context.fill();

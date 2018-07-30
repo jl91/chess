@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AppService } from "./service/app.service";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AppService} from './service/app.service';
 
 @Component({
   selector: 'app-root',

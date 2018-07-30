@@ -1,6 +1,6 @@
-import { PositionsEnum } from "../enum/positions.enum";
-import { Position } from "../model/position";
-import { SizesEnum } from "../enum/sizes.enum";
+import {PositionsEnum} from '../enum/positions.enum';
+import {Position} from '../model/position';
+import {SizesEnum} from '../enum/sizes.enum';
 
 export class BoardPositionsMap {
   public map = new Map<PositionsEnum, Position>();

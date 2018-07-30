@@ -1,7 +1,7 @@
-import { PositionsEnum } from "../enum/positions.enum";
+import {PositionsEnum} from '../enum/positions.enum';
 
 export class Position {
-  coordinate: PositionsEnum
+  coordinate: PositionsEnum;
   dstX: number;
   dstY: number;
   startX: number;

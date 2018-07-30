@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { BoardPositionsMap } from "../map/board-positions.map";
-import { SizesEnum } from "../enum/sizes.enum";
-import { Position } from "../model/position";
-import { PiecesService } from "./pieces.service";
-import { PositionMap } from "../map/position.map";
+import {Injectable} from '@angular/core';
+import {BoardPositionsMap} from '../map/board-positions.map';
+import {SizesEnum} from '../enum/sizes.enum';
+import {Position} from '../model/position';
+import {PiecesService} from './pieces.service';
+import {PositionMap} from '../map/position.map';
 
 @Injectable()
 export class BoardService {
 
   private context: CanvasRenderingContext2D;
   private readonly columnWidth = SizesEnum.SQUARE_WIDTH;
-  private readonly rowHeight = SizesEnum.SQUARE_HEIGHT
+  private readonly rowHeight = SizesEnum.SQUARE_HEIGHT;
   private readonly columnsSize = 8;
   private readonly rowsSize = 8;
   private readonly firstColor = '#FF8C00';
@@ -30,6 +30,43 @@ export class BoardService {
     this.drawBorder();
     this.drawBoardCoordinates();
     this.drawSquares();
+  }
+
+  public drawMouseOver(x: number, y: number): void {
+    this.changeMouseCursor(false);
+
+    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+    if (!position) {
+      return;
+    }
+
+    this.reDraw(position);
+    this.lastPosition = position;
+
+    if (this.positionMap.map.has(position.coordinate)) {
+      this.drawSquareBorder(position);
+      this.changeMouseCursor(true);
+      return;
+    }
+
+  }
+
+  public drawPiecePossibleMoviments(x: number, y: number): void {
+
+    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+    if (!position) {
+      return;
+    }
+
+    if (!this.positionMap.map.has(position.coordinate)) {
+      return;
+    }
+
+    const piece = this.positionMap.map.get(position.coordinate);
+
+    this.piecesService.drawPiecePossibleMoviments(position, piece);
   }
 
   private drawBorder(): void {
@@ -69,7 +106,7 @@ export class BoardService {
 
   private drawBoardCoordinate(word: string, x: number, y: number): void {
     this.context.beginPath();
-    this.context.font = "20px Arial";
+    this.context.font = '20px Arial';
     this.context.fillStyle = 'white';
     this.context.fillText(word, x, y);
     this.context.closePath();
@@ -112,43 +149,6 @@ export class BoardService {
       return isEvenColumn ? this.firstColor : this.secondColor;
     }
     return isEvenColumn ? this.secondColor : this.firstColor;
-  }
-
-  public drawMouseOver(x: number, y: number): void {
-    this.changeMouseCursor(false);
-
-    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
-
-    if (!position) {
-      return;
-    }
-
-    this.reDraw(position);
-    this.lastPosition = position;
-
-    if (this.positionMap.map.has(position.coordinate)) {
-      this.drawSquareBorder(position);
-      this.changeMouseCursor(true);
-      return;
-    }
-
-  }
-
-  public drawPiecePossibleMoviments(x: number, y: number): void {
-
-    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
-
-    if (!position) {
-      return;
-    }
-
-    if (!this.positionMap.map.has(position.coordinate)) {
-      return;
-    }
-
-    const piece = this.positionMap.map.get(position.coordinate);
-
-    this.piecesService.drawPiecePossibleMoviments(position, piece);
   }
 
   private reDraw(position: Position): void {
