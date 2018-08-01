@@ -41,20 +41,29 @@ export class PiecesService {
       this.drawBlackPawnPossibleMovements(position, piece);
     }
 
-    if (piece.name === PiecesNamesEnum.BLACK_ROOK) {
-      this.drawBlackRookPossibleMovements(position, piece);
+    if (
+      piece.name === PiecesNamesEnum.BLACK_ROOK ||
+      piece.name === PiecesNamesEnum.WHITE_ROOK
+    ) {
+      this.drawRookPossibleMovements(position, piece);
     }
 
     if (piece.name === PiecesNamesEnum.BLACK_KNIGHT) {
       this.drawBlackKnightPossibleMovements(position, piece);
     }
 
-    if (piece.name === PiecesNamesEnum.BLACK_BISHOP) {
-      this.drawBlackBishopPossibleMovements(position, piece);
+    if (
+      piece.name === PiecesNamesEnum.BLACK_BISHOP ||
+      piece.name === PiecesNamesEnum.WHITE_BISHOP
+    ) {
+      this.drawBishopPossibleMovements(position, piece);
     }
 
-    if (piece.name === PiecesNamesEnum.BLACK_QUEEN) {
-      this.drawBlackQueenPossibleMovements(position, piece);
+    if (
+      piece.name === PiecesNamesEnum.BLACK_QUEEN ||
+      piece.name === PiecesNamesEnum.WHITE_QUEEN
+    ) {
+      this.drawQueenPossibleMovements(position, piece);
     }
 
   }
@@ -99,12 +108,12 @@ export class PiecesService {
 
     this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT));
 
-    if (this.isFirstMovement(position, piece)) {
+    if (this.isPawnFirstMovement(position, piece)) {
       this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT * 2));
     }
   }
 
-  private drawBlackRookPossibleMovements(position: Position, piece: PieceModel): void {
+  private drawRookPossibleMovements(position: Position, piece: PieceModel): void {
 
     // top movements
     this.drawRookSquares(position, true, false);
@@ -142,7 +151,7 @@ export class PiecesService {
   private drawBlackKnightPossibleMovements(position: Position, piece: PieceModel): void {
   }
 
-  private drawBlackBishopPossibleMovements(position: Position, piece: PieceModel): void {
+  private drawBishopPossibleMovements(position: Position, piece: PieceModel): void {
 
     // top movements
     this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_LEFT);
@@ -158,9 +167,9 @@ export class PiecesService {
 
   }
 
-  private drawBlackQueenPossibleMovements(position: Position, piece: PieceModel): void {
-    this.drawBlackBishopPossibleMovements(position, piece);
-    this.drawBlackRookPossibleMovements(position, piece);
+  private drawQueenPossibleMovements(position: Position, piece: PieceModel): void {
+    this.drawBishopPossibleMovements(position, piece);
+    this.drawRookPossibleMovements(position, piece);
   }
 
   private drawBlackBishopSquares(position: Position, location: BishopCoordinatesEnum): void {
@@ -207,13 +216,13 @@ export class PiecesService {
     return true;
   }
 
-  private isFirstMovement(position: Position, piece: PieceModel): boolean {
+  private isPawnFirstMovement(position: Position, piece: PieceModel): boolean {
     return piece.position === position.coordinate;
   }
 
   private drawSquareBorder(x, y): void {
     this.context.beginPath();
-    this.context.strokeStyle = 'rgba(255, 0, 0)';
+    this.context.strokeStyle = '#AFEEEE';
     this.context.lineWidth = 5;
     this.context.strokeRect(x, y, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
     this.context.fill();
