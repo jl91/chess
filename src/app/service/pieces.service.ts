@@ -8,6 +8,7 @@ import {BoardPositionsMap} from '../map/board-positions.map';
 import {SizesEnum} from '../enum/sizes.enum';
 import {PieceModel} from '../model/piece.model';
 import {Position} from '../model/position';
+import {BishopCoordinatesEnum} from '../enum/bishop-coordinates.enum';
 
 @Injectable()
 export class PiecesService {
@@ -34,7 +35,7 @@ export class PiecesService {
     this.loadSprite();
   }
 
-  public drawPiecePossibleMoviments(position: Position, piece: PieceModel): void {
+  public drawPiecePossibleMovements(position: Position, piece: PieceModel): void {
 
     if (piece.name === PiecesNamesEnum.BLACK_PAWN) {
       this.drawBlackPawnPossibleMovements(position, piece);
@@ -44,10 +45,14 @@ export class PiecesService {
       this.drawBlackRookPossibleMovements(position, piece);
     }
 
-
     if (piece.name === PiecesNamesEnum.BLACK_KNIGHT) {
       this.drawBlackKnightPossibleMovements(position, piece);
     }
+
+    if (piece.name === PiecesNamesEnum.BLACK_BISHOP) {
+      this.drawBlackBishopPossibleMovements(position, piece);
+    }
+
   }
 
   private loadSprite() {
@@ -111,7 +116,6 @@ export class PiecesService {
 
   }
 
-
   private drawRookSquares(position: Position, isVertical: boolean, isPositive: boolean): void {
     let x = 0;
     let y = 0;
@@ -125,18 +129,73 @@ export class PiecesService {
         y = position.startY;
       }
 
-      const positionByCoordinate = this.boardPositionsMap.getPositionByCoordinates(x, y);
-
-      if (positionByCoordinate === undefined) {
+      if (!this.drawPiecePossibleMovementesByCoordinates(x, y)) {
         break;
       }
-
-      this.drawSquareBorder(x, y);
     }
   }
 
-
   private drawBlackKnightPossibleMovements(position: Position, piece: PieceModel): void {
+  }
+
+  private drawBlackBishopPossibleMovements(position: Position, piece: PieceModel): void {
+
+    // top movements
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_LEFT);
+
+    // right movements
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_RIGHT);
+
+    // bottom movements
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_RIGHT);
+    //
+    // left movements
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_LEFT);
+
+  }
+
+  private drawBlackBishopSquares(position: Position, location: BishopCoordinatesEnum): void {
+    let x = 0;
+    let y = 0;
+
+    for (let i = 0; i < 7; i++) {
+
+      if (location === BishopCoordinatesEnum.TOP_LEFT) {
+        x = position.startX - SizesEnum.SQUARE_HEIGHT * (i + 1);
+        y = position.startY - SizesEnum.SQUARE_HEIGHT * (i + 1);
+      }
+
+      if (location === BishopCoordinatesEnum.TOP_RIGHT) {
+        x = position.startX + SizesEnum.SQUARE_HEIGHT * (i + 1);
+        y = position.startY - SizesEnum.SQUARE_HEIGHT * (i + 1);
+      }
+
+      if (location === BishopCoordinatesEnum.BOTTOM_RIGHT) {
+        x = position.startX - SizesEnum.SQUARE_HEIGHT * -(i + 1);
+        y = position.startY + SizesEnum.SQUARE_HEIGHT * (i + 1);
+      }
+
+      if (location === BishopCoordinatesEnum.BOTTOM_LEFT) {
+        x = position.startX + SizesEnum.SQUARE_HEIGHT * -(i + 1);
+        y = position.startY + SizesEnum.SQUARE_HEIGHT * (i + 1);
+      }
+
+      if (!this.drawPiecePossibleMovementesByCoordinates(x, y)) {
+        break;
+      }
+
+    }
+  }
+
+  private drawPiecePossibleMovementesByCoordinates(x, y): boolean {
+    const positionByCoordinate = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+    if (positionByCoordinate === undefined) {
+      return false;
+    }
+
+    this.drawSquareBorder(x, y);
+    return true;
   }
 
   private isFirstMovement(position: Position, piece: PieceModel): boolean {

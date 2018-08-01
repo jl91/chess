@@ -66,7 +66,7 @@ export class BoardService {
 
     const piece = this.positionMap.map.get(position.coordinate);
 
-    this.piecesService.drawPiecePossibleMoviments(position, piece);
+    this.piecesService.drawPiecePossibleMovements(position, piece);
   }
 
   private drawBorder(): void {
