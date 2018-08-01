@@ -40,6 +40,11 @@ export class PiecesService {
       this.drawBlackPawnPossibleMovements(position, piece);
     }
 
+    if (piece.name === PiecesNamesEnum.BLACK_ROOK) {
+      this.drawBlackRookPossibleMovements(position, piece);
+    }
+
+
     if (piece.name === PiecesNamesEnum.BLACK_KNIGHT) {
       this.drawBlackKnightPossibleMovements(position, piece);
     }
@@ -89,6 +94,47 @@ export class PiecesService {
       this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT * 2));
     }
   }
+
+  private drawBlackRookPossibleMovements(position: Position, piece: PieceModel): void {
+
+    // top movements
+    this.drawRookSquares(position, true, false);
+
+    // right movements
+    this.drawRookSquares(position, false, true);
+
+    // bottom movements
+    this.drawRookSquares(position, true, true);
+
+    // left movements
+    this.drawRookSquares(position, false, false);
+
+  }
+
+
+  private drawRookSquares(position: Position, isVertical: boolean, isPositive: boolean): void {
+    let x = 0;
+    let y = 0;
+    for (let i = 0; i < 7; i++) {
+
+      if (isVertical) {
+        x = position.startX;
+        y = position.startY + SizesEnum.SQUARE_HEIGHT * (isPositive ? (i + 1) : -(i + 1));
+      } else {
+        x = position.startX + SizesEnum.SQUARE_HEIGHT * (isPositive ? (i + 1) : -(i + 1));
+        y = position.startY;
+      }
+
+      const positionByCoordinate = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+      if (positionByCoordinate === undefined) {
+        break;
+      }
+
+      this.drawSquareBorder(x, y);
+    }
+  }
+
 
   private drawBlackKnightPossibleMovements(position: Position, piece: PieceModel): void {
   }

@@ -86,19 +86,19 @@ export class BoardService {
     const increment = SizesEnum.SQUARE_WIDTH as number;
     for (let i = 0; i < 8; i++) {
 
-      let columnWord = this.boardPositionsMap.columnIndexes[i];
-      let rowWord = this.boardPositionsMap.rowIndexes[i];
+      const columnWord = this.boardPositionsMap.columnIndexes[i];
+      const rowWord = this.boardPositionsMap.rowIndexes[i];
 
-      //top
+      // top
       this.drawBoardCoordinate(columnWord, increment * i + hSpace, 18);
 
-      //bottom
+      // bottom
       this.drawBoardCoordinate(columnWord, increment * i + hSpace, 645);
 
-      //left
+      // left
       this.drawBoardCoordinate(rowWord, 6, increment * i + vSpace);
 
-      //right
+      // right
       this.drawBoardCoordinate(rowWord, 632.5, increment * i + vSpace);
     }
 
@@ -141,7 +141,7 @@ export class BoardService {
   }
 
   private isEven(value: number): boolean {
-    return value % 2 == 0;
+    return value % 2 === 0;
   }
 
   private getSquareColor(isEvenRow: boolean, isEvenColumn: boolean): string {
