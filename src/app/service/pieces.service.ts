@@ -53,6 +53,10 @@ export class PiecesService {
       this.drawBlackBishopPossibleMovements(position, piece);
     }
 
+    if (piece.name === PiecesNamesEnum.BLACK_QUEEN) {
+      this.drawBlackQueenPossibleMovements(position, piece);
+    }
+
   }
 
   private loadSprite() {
@@ -152,6 +156,11 @@ export class PiecesService {
     // left movements
     this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_LEFT);
 
+  }
+
+  private drawBlackQueenPossibleMovements(position: Position, piece: PieceModel): void {
+    this.drawBlackBishopPossibleMovements(position, piece);
+    this.drawBlackRookPossibleMovements(position, piece);
   }
 
   private drawBlackBishopSquares(position: Position, location: BishopCoordinatesEnum): void {
