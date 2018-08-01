@@ -9,6 +9,7 @@ import {SizesEnum} from '../enum/sizes.enum';
 import {PieceModel} from '../model/piece.model';
 import {Position} from '../model/position';
 import {BishopCoordinatesEnum} from '../enum/bishop-coordinates.enum';
+import {KnightEnum} from '../enum/knight.enum';
 
 @Injectable()
 export class PiecesService {
@@ -50,7 +51,7 @@ export class PiecesService {
     }
 
     if (this.isBishop(piece)) {
-      this.drawBishopPossibleMovements(position, piece);
+      this.drawBishopPossibleMovements(position);
     }
 
     if (this.isQueen(piece)) {
@@ -160,50 +161,100 @@ export class PiecesService {
 
   private drawKnightPossibleMovements(position: Position, piece: PieceModel): void {
 
-    // top
-    this.drawKnightSquares(position, true, false);
+    // TOP_LEFT = 'top-left',
+    // TOP_RIGHT = 'top-right',
+    //
+    // RIGHT_TOP = 'right-top',
+    // RIGHT_BOTTOM = 'right-bottom',
+    //
+    // BOTTOM_LEFT = 'bottom-left',
+    // BOTTOM_RIGHT = 'bottom-right',
+    //
+    // LEFT_TOP = 'left-top',
+    // LEFT_BOTTOM = 'left-bottom'
 
-    // right
-    this.drawKnightSquares(position, false, true);
+    // TOP_LEFT
+    this.drawKnightSquares(position, KnightEnum.TOP_LEFT);
 
-    // bottom
-    this.drawKnightSquares(position, true, true);
+    // TOP_RIGHT
+    this.drawKnightSquares(position, KnightEnum.TOP_RIGHT);
 
-    // left
-    this.drawKnightSquares(position, false, false);
+    // RIGHT_TOP
+    this.drawKnightSquares(position, KnightEnum.RIGHT_TOP);
+
+    // RIGHT_BOTTOM
+    this.drawKnightSquares(position, KnightEnum.RIGHT_BOTTOM);
 
   }
 
-  private drawKnightSquares(position: Position, isVertical: boolean, isPositive: boolean): void {
+  private drawKnightSquares(position: Position, location: KnightEnum): void {
+
+    if (!this.canDrawLocation(position, location)) {
+      return;
+    }
+
 
     let x = 0;
     let y = 0;
+
     for (let i = 0; i < 2; i++) {
 
-      if (isVertical) {
+      if (
+        location === KnightEnum.TOP_LEFT ||
+        location === KnightEnum.TOP_RIGHT
+      ) {
         x = position.startX;
-        y = position.startY + SizesEnum.SQUARE_HEIGHT * (isPositive ? (i + 1) : -(i + 1));
-      } else {
-        x = position.startX + SizesEnum.SQUARE_HEIGHT * (isPositive ? (i + 1) : -(i + 1));
-        y = position.startY;
+        y = position.startY - SizesEnum.SQUARE_HEIGHT * (i + 1);
       }
 
-      if (!this.drawPiecePossibleMovementsByCoordinates(x, y)) {
-        break;
+      if (
+        location === KnightEnum.RIGHT_TOP ||
+        location === KnightEnum.RIGHT_BOTTOM
+      ) {
+        x = position.startX;
+        y = position.startY - SizesEnum.SQUARE_HEIGHT * (i + 1);
       }
+
+      this.drawPiecePossibleMovementsByCoordinates(x, y);
     }
 
-    if (isVertical) {
-      this.drawPiecePossibleMovementsByCoordinates(x + SizesEnum.SQUARE_HEIGHT, y);
-      this.drawPiecePossibleMovementsByCoordinates(x - SizesEnum.SQUARE_HEIGHT, y);
-    } else {
-      this.drawPiecePossibleMovementsByCoordinates(x, y + SizesEnum.SQUARE_HEIGHT);
-      this.drawPiecePossibleMovementsByCoordinates(x, y - SizesEnum.SQUARE_HEIGHT);
+    if (location === KnightEnum.TOP_LEFT) {
+      x -= SizesEnum.SQUARE_HEIGHT;
     }
+
+    if (location === KnightEnum.TOP_RIGHT) {
+      x += SizesEnum.SQUARE_HEIGHT;
+    }
+
+    this.drawPiecePossibleMovementsByCoordinates(x, y);
 
   }
 
-  private drawBishopPossibleMovements(position: Position, piece: PieceModel): void {
+  private canDrawLocation(position: Position, location: KnightEnum): boolean {
+
+    let x = 0;
+    let y = 0;
+
+    if (location === KnightEnum.TOP_LEFT) {
+      x = position.startX - SizesEnum.SQUARE_HEIGHT;
+      y = position.startY - SizesEnum.SQUARE_HEIGHT * 2;
+    }
+
+    if (location === KnightEnum.TOP_RIGHT) {
+      x = position.startX + SizesEnum.SQUARE_HEIGHT;
+      y = position.startY - SizesEnum.SQUARE_HEIGHT * 2;
+    }
+
+    const newPosition = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+    if (newPosition === undefined) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private drawBishopPossibleMovements(position: Position): void {
 
     // top movements
     this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_LEFT);
@@ -220,7 +271,7 @@ export class PiecesService {
   }
 
   private drawQueenPossibleMovements(position: Position, piece: PieceModel): void {
-    this.drawBishopPossibleMovements(position, piece);
+    this.drawBishopPossibleMovements(position);
     this.drawRookPossibleMovements(position, piece);
   }
 
