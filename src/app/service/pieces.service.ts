@@ -37,35 +37,45 @@ export class PiecesService {
 
   public drawPiecePossibleMovements(position: Position, piece: PieceModel): void {
 
-    if (piece.name === PiecesNamesEnum.BLACK_PAWN) {
+    if (this.isBlackPawn(piece)) {
       this.drawBlackPawnPossibleMovements(position, piece);
     }
 
-    if (
-      piece.name === PiecesNamesEnum.BLACK_ROOK ||
-      piece.name === PiecesNamesEnum.WHITE_ROOK
-    ) {
+    if (this.isRook(piece)) {
       this.drawRookPossibleMovements(position, piece);
     }
 
-    if (piece.name === PiecesNamesEnum.BLACK_KNIGHT) {
-      this.drawBlackKnightPossibleMovements(position, piece);
+    if (this.isKnight(piece)) {
+      this.drawKnightPossibleMovements(position, piece);
     }
 
-    if (
-      piece.name === PiecesNamesEnum.BLACK_BISHOP ||
-      piece.name === PiecesNamesEnum.WHITE_BISHOP
-    ) {
+    if (this.isBishop(piece)) {
       this.drawBishopPossibleMovements(position, piece);
     }
 
-    if (
-      piece.name === PiecesNamesEnum.BLACK_QUEEN ||
-      piece.name === PiecesNamesEnum.WHITE_QUEEN
-    ) {
+    if (this.isQueen(piece)) {
       this.drawQueenPossibleMovements(position, piece);
     }
+  }
 
+  private isBlackPawn(piece): boolean {
+    return piece.name === PiecesNamesEnum.BLACK_PAWN;
+  }
+
+  private isRook(piece: PieceModel): boolean {
+    return piece.name === PiecesNamesEnum.BLACK_ROOK || piece.name === PiecesNamesEnum.WHITE_ROOK;
+  }
+
+  private isKnight(piece: PieceModel): boolean {
+    return piece.name === PiecesNamesEnum.BLACK_KNIGHT || piece.name === PiecesNamesEnum.WHITE_KNIGHT;
+  }
+
+  private isBishop(piece: PieceModel): boolean {
+    return piece.name === PiecesNamesEnum.BLACK_BISHOP || piece.name === PiecesNamesEnum.WHITE_BISHOP;
+  }
+
+  private isQueen(piece: PieceModel): boolean {
+    return piece.name === PiecesNamesEnum.BLACK_QUEEN || piece.name === PiecesNamesEnum.WHITE_QUEEN;
   }
 
   private loadSprite() {
@@ -142,13 +152,55 @@ export class PiecesService {
         y = position.startY;
       }
 
-      if (!this.drawPiecePossibleMovementesByCoordinates(x, y)) {
+      if (!this.drawPiecePossibleMovementsByCoordinates(x, y)) {
         break;
       }
     }
   }
 
-  private drawBlackKnightPossibleMovements(position: Position, piece: PieceModel): void {
+  private drawKnightPossibleMovements(position: Position, piece: PieceModel): void {
+
+    // top
+    this.drawKnightSquares(position, true, false);
+
+    // right
+    this.drawKnightSquares(position, false, true);
+
+    // bottom
+    this.drawKnightSquares(position, true, true);
+
+    // left
+    this.drawKnightSquares(position, false, false);
+
+  }
+
+  private drawKnightSquares(position: Position, isVertical: boolean, isPositive: boolean): void {
+
+    let x = 0;
+    let y = 0;
+    for (let i = 0; i < 2; i++) {
+
+      if (isVertical) {
+        x = position.startX;
+        y = position.startY + SizesEnum.SQUARE_HEIGHT * (isPositive ? (i + 1) : -(i + 1));
+      } else {
+        x = position.startX + SizesEnum.SQUARE_HEIGHT * (isPositive ? (i + 1) : -(i + 1));
+        y = position.startY;
+      }
+
+      if (!this.drawPiecePossibleMovementsByCoordinates(x, y)) {
+        break;
+      }
+    }
+
+    if (isVertical) {
+      this.drawPiecePossibleMovementsByCoordinates(x + SizesEnum.SQUARE_HEIGHT, y);
+      this.drawPiecePossibleMovementsByCoordinates(x - SizesEnum.SQUARE_HEIGHT, y);
+    } else {
+      this.drawPiecePossibleMovementsByCoordinates(x, y + SizesEnum.SQUARE_HEIGHT);
+      this.drawPiecePossibleMovementsByCoordinates(x, y - SizesEnum.SQUARE_HEIGHT);
+    }
+
   }
 
   private drawBishopPossibleMovements(position: Position, piece: PieceModel): void {
@@ -198,14 +250,14 @@ export class PiecesService {
         y = position.startY + SizesEnum.SQUARE_HEIGHT * (i + 1);
       }
 
-      if (!this.drawPiecePossibleMovementesByCoordinates(x, y)) {
+      if (!this.drawPiecePossibleMovementsByCoordinates(x, y)) {
         break;
       }
 
     }
   }
 
-  private drawPiecePossibleMovementesByCoordinates(x, y): boolean {
+  private drawPiecePossibleMovementsByCoordinates(x, y): boolean {
     const positionByCoordinate = this.boardPositionsMap.getPositionByCoordinates(x, y);
 
     if (positionByCoordinate === undefined) {
