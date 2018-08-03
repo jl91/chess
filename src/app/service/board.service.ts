@@ -17,6 +17,10 @@ export class BoardService {
   private readonly secondColor = '#8B4513';
   private lastPosition: Position;
 
+  private firstPosition: Position;
+  private secondPosition: Position;
+
+
   constructor(
     private boardPositionsMap: BoardPositionsMap,
     private piecesService: PiecesService,
@@ -67,6 +71,39 @@ export class BoardService {
     const piece = this.positionMap.map.get(position.coordinate);
 
     this.piecesService.drawPiecePossibleMovements(position, piece);
+  }
+
+  public move(x: number, y: number): void {
+    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
+
+    if (position === undefined) {
+      return;
+    }
+
+    if (!this.firstPosition) {
+      this.firstPosition = position;
+      return;
+    }
+
+    if (!this.secondPosition && position.coordinate !== this.firstPosition.coordinate) {
+      this.secondPosition = position;
+    }
+
+    const piece1 = this.positionMap.map.get(this.firstPosition.coordinate);
+    const piece2 = this.positionMap.map.get(this.secondPosition.coordinate);
+
+    const hasPiece = this.boardPositionsMap.hasPiece(x, y);
+    const isPieceFromOtherSide = (hasPiece && !this.piecesService.isFromSameSide(this.firstPosition, this.secondPosition));
+
+    if (!hasPiece || isPieceFromOtherSide) {
+      this.positionMap.map.delete(this.firstPosition.coordinate);
+      this.positionMap.map.set(this.secondPosition.coordinate, piece1);
+      this.piecesService.drawPieces(this.context);
+      this.firstPosition = null;
+      this.secondPosition = null;
+      return;
+    }
+
   }
 
   private drawBorder(): void {
@@ -182,4 +219,5 @@ export class BoardService {
     }
     document.body.style.cursor = 'auto';
   }
+
 }

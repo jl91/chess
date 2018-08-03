@@ -30,5 +30,6 @@ export class AppService {
 
   public onClick(event: MouseEvent): void {
     this.boardService.drawPiecePossibleMoviments(event.offsetX, event.offsetY);
+    this.boardService.move(event.offsetX, event.offsetY);
   }
 }

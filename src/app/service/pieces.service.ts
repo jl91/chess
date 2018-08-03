@@ -76,25 +76,29 @@ export class PiecesService {
     return piece.name === PiecesNamesEnum.WHITE_PAWN;
   }
 
-
   private isRook(piece: PieceModel): boolean {
-    return piece.name === PiecesNamesEnum.BLACK_ROOK || piece.name === PiecesNamesEnum.WHITE_ROOK;
+    return piece.name === PiecesNamesEnum.BLACK_ROOK ||
+      piece.name === PiecesNamesEnum.WHITE_ROOK;
   }
 
   private isKnight(piece: PieceModel): boolean {
-    return piece.name === PiecesNamesEnum.BLACK_KNIGHT || piece.name === PiecesNamesEnum.WHITE_KNIGHT;
+    return piece.name === PiecesNamesEnum.BLACK_KNIGHT ||
+      piece.name === PiecesNamesEnum.WHITE_KNIGHT;
   }
 
   private isBishop(piece: PieceModel): boolean {
-    return piece.name === PiecesNamesEnum.BLACK_BISHOP || piece.name === PiecesNamesEnum.WHITE_BISHOP;
+    return piece.name === PiecesNamesEnum.BLACK_BISHOP ||
+      piece.name === PiecesNamesEnum.WHITE_BISHOP;
   }
 
   private isQueen(piece: PieceModel): boolean {
-    return piece.name === PiecesNamesEnum.BLACK_QUEEN || piece.name === PiecesNamesEnum.WHITE_QUEEN;
+    return piece.name === PiecesNamesEnum.BLACK_QUEEN ||
+      piece.name === PiecesNamesEnum.WHITE_QUEEN;
   }
 
   private isKing(piece: PieceModel): boolean {
-    return piece.name === PiecesNamesEnum.BLACK_KING || piece.name === PiecesNamesEnum.WHITE_KING;
+    return piece.name === PiecesNamesEnum.BLACK_KING ||
+      piece.name === PiecesNamesEnum.WHITE_KING;
   }
 
   private loadSprite() {
@@ -143,7 +147,7 @@ export class PiecesService {
       y = position.startY - SizesEnum.SQUARE_HEIGHT;
     }
 
-    if (this.hasPiece(x, y)) {
+    if (this.boardPositionsMap.hasPiece(x, y)) {
       return;
     }
 
@@ -159,7 +163,7 @@ export class PiecesService {
       y = position.startY - SizesEnum.SQUARE_HEIGHT * 2;
     }
 
-    if (this.hasPiece(x, y)) {
+    if (this.boardPositionsMap.hasPiece(x, y)) {
       return;
     }
 
@@ -215,7 +219,7 @@ export class PiecesService {
         break;
       }
 
-      if (!isFromSameSide && this.hasPiece(x, y)) {
+      if (!isFromSameSide && this.boardPositionsMap.hasPiece(x, y)) {
         stopOnNext = true;
       }
     }
@@ -384,7 +388,7 @@ export class PiecesService {
     return !isMyPiece;
   }
 
-  private isFromSameSide(position: Position, anotherPosition: Position): boolean {
+  public isFromSameSide(position: Position, anotherPosition: Position): boolean {
 
     if (
       !position ||
@@ -405,10 +409,6 @@ export class PiecesService {
       piece1.type === piece2.type;
   }
 
-  private hasPiece(x: number, y: number): boolean {
-    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
-    return this.positionMap.map.has(position.coordinate);
-  }
 
   private drawBishopPossibleMovements(position: Position, hasLimit: boolean = false): void {
 
@@ -495,7 +495,7 @@ export class PiecesService {
 
   private drawSquareBorder(x, y, color: string = '#AFEEEE'): void {
     this.context.beginPath();
-    this.context.strokeStyle = 'color';
+    this.context.strokeStyle = color;
     this.context.lineWidth = 5;
     this.context.strokeRect(x, y, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
     this.context.fill();

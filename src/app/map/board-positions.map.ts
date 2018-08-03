@@ -48,4 +48,9 @@ export class BoardPositionsMap {
     return position;
   }
 
+  public hasPiece(x: number, y: number): boolean {
+    const position = this.getPositionByCoordinates(x, y);
+    return this.map.has(position.coordinate);
+  }
+
 }
