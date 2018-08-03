@@ -153,9 +153,20 @@ export class PiecesService {
         y = position.startY;
       }
 
+      const newPosition = this.boardPositionsMap.getPositionByCoordinates(x, y);
+      const isFromSameSide = this.isFromSameSide(position, newPosition)
+
+      if (isFromSameSide) {
+        break;
+      }
+
       if (!this.drawPiecePossibleMovementsByCoordinates(x, y)) {
         break;
       }
+
+      // if (!isFromSameSide && this.hasPiece(x, y)) {
+      //   break;
+      // }
     }
   }
 
@@ -323,6 +334,16 @@ export class PiecesService {
   }
 
   private isFromSameSide(position: Position, anotherPosition: Position): boolean {
+
+    if (
+      !position ||
+      !position.coordinate ||
+      !anotherPosition ||
+      !anotherPosition.coordinate
+    ) {
+      return false;
+    }
+
     const piece1 = this.positionMap.map.get(position.coordinate);
     const piece2 = this.positionMap.map.get(anotherPosition.coordinate);
 
@@ -331,6 +352,10 @@ export class PiecesService {
       piece1.type &&
       piece2.type &&
       piece1.type === piece2.type;
+  }
+
+  private hasPiece(x: number, y: number): boolean {
+    return this.boardPositionsMap.getPositionByCoordinates(x, y) !== undefined;
   }
 
   private drawBishopPossibleMovements(position: Position): void {
