@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { PositionMap } from '../map/position.map';
-import { PositionsEnum } from '../enum/positions.enum';
-import { PiecesNamesEnum } from '../enum/pieces-names.enum';
-import { PiecesSpriteMap } from '../map/pieces-sprite.map';
-import { BoardPositionsMap } from '../map/board-positions.map';
-import { SizesEnum } from '../enum/sizes.enum';
-import { PieceModel } from '../model/piece.model';
-import { Position } from '../model/position';
-import { BishopCoordinatesEnum } from '../enum/bishop-coordinates.enum';
-import { KnightEnum } from '../enum/knight.enum';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs/Subject';
+import {PositionMap} from '../map/position.map';
+import {PositionsEnum} from '../enum/positions.enum';
+import {PiecesNamesEnum} from '../enum/pieces-names.enum';
+import {PiecesSpriteMap} from '../map/pieces-sprite.map';
+import {BoardPositionsMap} from '../map/board-positions.map';
+import {SizesEnum} from '../enum/sizes.enum';
+import {PieceModel} from '../model/piece.model';
+import {Position} from '../model/position';
+import {BishopCoordinatesEnum} from '../enum/bishop-coordinates.enum';
+import {KnightEnum} from '../enum/knight.enum';
 
 @Injectable()
 export class PiecesService {
@@ -39,7 +39,11 @@ export class PiecesService {
   public drawPiecePossibleMovements(position: Position, piece: PieceModel): void {
 
     if (this.isBlackPawn(piece)) {
-      this.drawBlackPawnPossibleMovements(position, piece);
+      this.drawPawnPossibleMovements(position, piece, true);
+    }
+
+    if (this.isWhitePawn(piece)) {
+      this.drawPawnPossibleMovements(position, piece, false);
     }
 
     if (this.isRook(piece)) {
@@ -62,6 +66,11 @@ export class PiecesService {
   private isBlackPawn(piece): boolean {
     return piece.name === PiecesNamesEnum.BLACK_PAWN;
   }
+
+  private isWhitePawn(piece): boolean {
+    return piece.name === PiecesNamesEnum.WHITE_PAWN;
+  }
+
 
   private isRook(piece: PieceModel): boolean {
     return piece.name === PiecesNamesEnum.BLACK_ROOK || piece.name === PiecesNamesEnum.WHITE_ROOK;
@@ -115,13 +124,37 @@ export class PiecesService {
       });
   }
 
-  private drawBlackPawnPossibleMovements(position: Position, piece: PieceModel): void {
+  private drawPawnPossibleMovements(position: Position, piece: PieceModel, isBlack: boolean = true): void {
 
-    this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT));
-
-    if (this.isPawnFirstMovement(position, piece)) {
-      this.drawSquareBorder(position.startX, (position.startY + SizesEnum.SQUARE_HEIGHT * 2));
+    const x = position.startX;
+    let y = 0;
+    if (isBlack) {
+      y = position.startY + SizesEnum.SQUARE_HEIGHT;
+    } else {
+      y = position.startY - SizesEnum.SQUARE_HEIGHT;
     }
+
+    if (this.hasPiece(x, y)) {
+      return;
+    }
+
+    this.drawSquareBorder(x, y);
+
+    if (!this.isPawnFirstMovement(position, piece)) {
+      return;
+    }
+
+    if (isBlack) {
+      y = position.startY + SizesEnum.SQUARE_HEIGHT * 2;
+    } else {
+      y = position.startY - SizesEnum.SQUARE_HEIGHT * 2;
+    }
+
+    if (this.hasPiece(x, y)) {
+      return;
+    }
+
+    this.drawSquareBorder(x, y);
   }
 
   private drawRookPossibleMovements(position: Position, piece: PieceModel): void {
@@ -143,6 +176,7 @@ export class PiecesService {
   private drawRookSquares(position: Position, isVertical: boolean, isPositive: boolean): void {
     let x = 0;
     let y = 0;
+    let stopOnNext = false;
     for (let i = 0; i < 7; i++) {
 
       if (isVertical) {
@@ -154,7 +188,7 @@ export class PiecesService {
       }
 
       const newPosition = this.boardPositionsMap.getPositionByCoordinates(x, y);
-      const isFromSameSide = this.isFromSameSide(position, newPosition)
+      const isFromSameSide = this.isFromSameSide(position, newPosition);
 
       if (isFromSameSide) {
         break;
@@ -164,9 +198,9 @@ export class PiecesService {
         break;
       }
 
-      // if (!isFromSameSide && this.hasPiece(x, y)) {
-      //   break;
-      // }
+      if (!isFromSameSide && this.hasPiece(x, y)) {
+        stopOnNext = true;
+      }
     }
   }
 
@@ -355,7 +389,8 @@ export class PiecesService {
   }
 
   private hasPiece(x: number, y: number): boolean {
-    return this.boardPositionsMap.getPositionByCoordinates(x, y) !== undefined;
+    const position = this.boardPositionsMap.getPositionByCoordinates(x, y);
+    return this.positionMap.map.has(position.coordinate);
   }
 
   private drawBishopPossibleMovements(position: Position): void {
@@ -403,6 +438,13 @@ export class PiecesService {
       if (location === BishopCoordinatesEnum.BOTTOM_LEFT) {
         x = position.startX + SizesEnum.SQUARE_HEIGHT * -(i + 1);
         y = position.startY + SizesEnum.SQUARE_HEIGHT * (i + 1);
+      }
+
+      const newPosition = this.boardPositionsMap.getPositionByCoordinates(x, y);
+      const isFromSameSide = this.isFromSameSide(position, newPosition);
+
+      if (isFromSameSide) {
+        break;
       }
 
       if (!this.drawPiecePossibleMovementsByCoordinates(x, y)) {
