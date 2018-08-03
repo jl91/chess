@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {PositionMap} from '../map/position.map';
-import {PositionsEnum} from '../enum/positions.enum';
-import {PiecesNamesEnum} from '../enum/pieces-names.enum';
-import {PiecesSpriteMap} from '../map/pieces-sprite.map';
-import {BoardPositionsMap} from '../map/board-positions.map';
-import {SizesEnum} from '../enum/sizes.enum';
-import {PieceModel} from '../model/piece.model';
-import {Position} from '../model/position';
-import {BishopCoordinatesEnum} from '../enum/bishop-coordinates.enum';
-import {KnightEnum} from '../enum/knight.enum';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { PositionMap } from '../map/position.map';
+import { PositionsEnum } from '../enum/positions.enum';
+import { PiecesNamesEnum } from '../enum/pieces-names.enum';
+import { PiecesSpriteMap } from '../map/pieces-sprite.map';
+import { BoardPositionsMap } from '../map/board-positions.map';
+import { SizesEnum } from '../enum/sizes.enum';
+import { PieceModel } from '../model/piece.model';
+import { Position } from '../model/position';
+import { BishopCoordinatesEnum } from '../enum/bishop-coordinates.enum';
+import { KnightEnum } from '../enum/knight.enum';
 
 @Injectable()
 export class PiecesService {
@@ -161,18 +161,6 @@ export class PiecesService {
 
   private drawKnightPossibleMovements(position: Position, piece: PieceModel): void {
 
-    // TOP_LEFT = 'top-left',
-    // TOP_RIGHT = 'top-right',
-    //
-    // RIGHT_TOP = 'right-top',
-    // RIGHT_BOTTOM = 'right-bottom',
-    //
-    // BOTTOM_LEFT = 'bottom-left',
-    // BOTTOM_RIGHT = 'bottom-right',
-    //
-    // LEFT_TOP = 'left-top',
-    // LEFT_BOTTOM = 'left-bottom'
-
     // TOP_LEFT
     this.drawKnightSquares(position, KnightEnum.TOP_LEFT);
 
@@ -184,6 +172,18 @@ export class PiecesService {
 
     // RIGHT_BOTTOM
     this.drawKnightSquares(position, KnightEnum.RIGHT_BOTTOM);
+
+    // BOTTOM_LEFT
+    this.drawKnightSquares(position, KnightEnum.BOTTOM_LEFT);
+
+    // BOTTOM_RIGHT
+    this.drawKnightSquares(position, KnightEnum.BOTTOM_RIGHT);
+
+    // BOTTOM_LEFT
+    this.drawKnightSquares(position, KnightEnum.LEFT_TOP);
+
+    // BOTTOM_RIGHT
+    this.drawKnightSquares(position, KnightEnum.LEFT_BOTTOM);
 
   }
 
@@ -211,19 +211,55 @@ export class PiecesService {
         location === KnightEnum.RIGHT_TOP ||
         location === KnightEnum.RIGHT_BOTTOM
       ) {
+        x = position.startX + SizesEnum.SQUARE_HEIGHT * (i + 1);
+        y = position.startY;
+      }
+
+      if (
+        location === KnightEnum.BOTTOM_LEFT ||
+        location === KnightEnum.BOTTOM_RIGHT
+      ) {
         x = position.startX;
-        y = position.startY - SizesEnum.SQUARE_HEIGHT * (i + 1);
+        y = position.startY + SizesEnum.SQUARE_HEIGHT * (i + 1);
+      }
+
+      if (
+        location === KnightEnum.LEFT_TOP ||
+        location === KnightEnum.LEFT_BOTTOM
+      ) {
+        x = position.startX - SizesEnum.SQUARE_HEIGHT * (i + 1);
+        y = position.startY;
       }
 
       this.drawPiecePossibleMovementsByCoordinates(x, y);
     }
 
-    if (location === KnightEnum.TOP_LEFT) {
+    if (
+      location === KnightEnum.TOP_LEFT ||
+      location === KnightEnum.BOTTOM_LEFT
+    ) {
       x -= SizesEnum.SQUARE_HEIGHT;
     }
 
-    if (location === KnightEnum.TOP_RIGHT) {
+    if (
+      location === KnightEnum.TOP_RIGHT ||
+      location === KnightEnum.BOTTOM_RIGHT
+    ) {
       x += SizesEnum.SQUARE_HEIGHT;
+    }
+
+    if (
+      location === KnightEnum.LEFT_TOP ||
+      location === KnightEnum.RIGHT_TOP
+    ) {
+      y -= SizesEnum.SQUARE_HEIGHT;
+    }
+
+    if (
+      location === KnightEnum.RIGHT_BOTTOM ||
+      location === KnightEnum.LEFT_BOTTOM
+    ) {
+      y += SizesEnum.SQUARE_HEIGHT;
     }
 
     this.drawPiecePossibleMovementsByCoordinates(x, y);
@@ -245,13 +281,56 @@ export class PiecesService {
       y = position.startY - SizesEnum.SQUARE_HEIGHT * 2;
     }
 
+    if (location === KnightEnum.RIGHT_TOP) {
+      x = position.startX + SizesEnum.SQUARE_HEIGHT * 2;
+      y = position.startY - SizesEnum.SQUARE_HEIGHT;
+    }
+
+    if (location === KnightEnum.RIGHT_BOTTOM) {
+      x = position.startX + SizesEnum.SQUARE_HEIGHT * 2;
+      y = position.startY + SizesEnum.SQUARE_HEIGHT;
+    }
+
+    if (location === KnightEnum.BOTTOM_LEFT) {
+      x = position.startX - SizesEnum.SQUARE_HEIGHT;
+      y = position.startY + SizesEnum.SQUARE_HEIGHT * 2;
+    }
+
+    if (location === KnightEnum.BOTTOM_RIGHT) {
+      x = position.startX + SizesEnum.SQUARE_HEIGHT;
+      y = position.startY + SizesEnum.SQUARE_HEIGHT * 2;
+    }
+
+    if (location === KnightEnum.LEFT_TOP) {
+      x = position.startX - SizesEnum.SQUARE_HEIGHT * 2;
+      y = position.startY - SizesEnum.SQUARE_HEIGHT;
+    }
+
+    if (location === KnightEnum.LEFT_BOTTOM) {
+      x = position.startX - SizesEnum.SQUARE_HEIGHT * 2;
+      y = position.startY + SizesEnum.SQUARE_HEIGHT;
+    }
+
     const newPosition = this.boardPositionsMap.getPositionByCoordinates(x, y);
 
     if (newPosition === undefined) {
       return false;
     }
 
-    return true;
+    const isMyPiece = this.isFromSameSide(position, newPosition);
+
+    return !isMyPiece;
+  }
+
+  private isFromSameSide(position: Position, anotherPosition: Position): boolean {
+    const piece1 = this.positionMap.map.get(position.coordinate);
+    const piece2 = this.positionMap.map.get(anotherPosition.coordinate);
+
+    return piece1 &&
+      piece2 &&
+      piece1.type &&
+      piece2.type &&
+      piece1.type === piece2.type;
   }
 
   private drawBishopPossibleMovements(position: Position): void {
@@ -323,9 +402,9 @@ export class PiecesService {
     return piece.position === position.coordinate;
   }
 
-  private drawSquareBorder(x, y): void {
+  private drawSquareBorder(x, y, color: string = '#AFEEEE'): void {
     this.context.beginPath();
-    this.context.strokeStyle = '#AFEEEE';
+    this.context.strokeStyle = 'color';
     this.context.lineWidth = 5;
     this.context.strokeRect(x, y, SizesEnum.SQUARE_WIDTH, SizesEnum.SQUARE_HEIGHT);
     this.context.fill();
