@@ -61,6 +61,11 @@ export class PiecesService {
     if (this.isQueen(piece)) {
       this.drawQueenPossibleMovements(position, piece);
     }
+
+    if (this.isKing(piece)) {
+      this.drawKingPossibleMovements(position, piece);
+    }
+
   }
 
   private isBlackPawn(piece): boolean {
@@ -86,6 +91,10 @@ export class PiecesService {
 
   private isQueen(piece: PieceModel): boolean {
     return piece.name === PiecesNamesEnum.BLACK_QUEEN || piece.name === PiecesNamesEnum.WHITE_QUEEN;
+  }
+
+  private isKing(piece: PieceModel): boolean {
+    return piece.name === PiecesNamesEnum.BLACK_KING || piece.name === PiecesNamesEnum.WHITE_KING;
   }
 
   private loadSprite() {
@@ -157,27 +166,35 @@ export class PiecesService {
     this.drawSquareBorder(x, y);
   }
 
-  private drawRookPossibleMovements(position: Position, piece: PieceModel): void {
+  private drawRookPossibleMovements(position: Position, piece: PieceModel, hasLimit: boolean = false): void {
 
     // top movements
-    this.drawRookSquares(position, true, false);
+    this.drawRookSquares(position, true, false, hasLimit);
 
     // right movements
-    this.drawRookSquares(position, false, true);
+    this.drawRookSquares(position, false, true, hasLimit);
 
     // bottom movements
-    this.drawRookSquares(position, true, true);
+    this.drawRookSquares(position, true, true, hasLimit);
 
     // left movements
-    this.drawRookSquares(position, false, false);
+    this.drawRookSquares(position, false, false, hasLimit);
 
   }
 
-  private drawRookSquares(position: Position, isVertical: boolean, isPositive: boolean): void {
+  private drawRookSquares(
+    position: Position,
+    isVertical: boolean,
+    isPositive: boolean,
+    hasLimit: boolean = false
+  ): void {
     let x = 0;
     let y = 0;
     let stopOnNext = false;
-    for (let i = 0; i < 7; i++) {
+
+    const limit = hasLimit ? 1 : 7;
+
+    for (let i = 0; i < limit; i++) {
 
       if (isVertical) {
         x = position.startX;
@@ -393,32 +410,39 @@ export class PiecesService {
     return this.positionMap.map.has(position.coordinate);
   }
 
-  private drawBishopPossibleMovements(position: Position): void {
+  private drawBishopPossibleMovements(position: Position, hasLimit: boolean = false): void {
 
     // top movements
-    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_LEFT);
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_LEFT, hasLimit);
 
     // right movements
-    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_RIGHT);
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.TOP_RIGHT, hasLimit);
 
     // bottom movements
-    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_RIGHT);
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_RIGHT, hasLimit);
     //
     // left movements
-    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_LEFT);
+    this.drawBlackBishopSquares(position, BishopCoordinatesEnum.BOTTOM_LEFT, hasLimit);
 
   }
 
-  private drawQueenPossibleMovements(position: Position, piece: PieceModel): void {
+  private drawQueenPossibleMovements(position: Position, piece: PieceModel, hasLimit: boolean = false): void {
     this.drawBishopPossibleMovements(position);
     this.drawRookPossibleMovements(position, piece);
   }
 
-  private drawBlackBishopSquares(position: Position, location: BishopCoordinatesEnum): void {
+  private drawKingPossibleMovements(position: Position, piece: PieceModel): void {
+    this.drawBishopPossibleMovements(position, true);
+    this.drawRookPossibleMovements(position, piece, true);
+  }
+
+  private drawBlackBishopSquares(position: Position, location: BishopCoordinatesEnum, hasLimit: boolean = false): void {
     let x = 0;
     let y = 0;
 
-    for (let i = 0; i < 7; i++) {
+    const limit = hasLimit ? 1 : 7;
+
+    for (let i = 0; i < limit; i++) {
 
       if (location === BishopCoordinatesEnum.TOP_LEFT) {
         x = position.startX - SizesEnum.SQUARE_HEIGHT * (i + 1);
